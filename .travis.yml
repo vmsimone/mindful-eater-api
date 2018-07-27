@@ -1,4 +1,11 @@
 language: node_js
 node_js: node
 services:
-  - mongodb
+- mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: O+9WHXU4SRzQqESiKdR00vqyPbkjIjpvzUeBZolBnKz6lNpSRNxRkqd85QMiwW81rfqxgPI7ybNdvf8RWSwxjjBXZfcEQIcjsasS7RGVSGabE8Vm9Mfy/AU94Gkd5xf8wZQ7jOZLPqSyAK4xQIujVwZyiWRx3HRt5db/0kRqn9SFkkKOZCR3mylfZHFH1MPJaOosfgLOm0/l53Qb3yTCGxK59BNDRYfSO8H8ct9ZAFOobIn+JAl+647XHb0M95zf8/LOXAdn/VMjlOPBoenlE4GVyEfvwA6QaUdMyxchKVMrag+T1Euhs+ZwHhCRGfDf27wrmRN/RVv0Za/1A3sKNFF426UgIvFlJZoJ8AN+Y+6aoeFnQD5So0vPRcn6Mns/rlNJGiDDKcawIzfFKlD0bt+zzOkoNWbeefmOv2/rbarHdV8p9ARfb1j+ZimHIx2j3eyQ8WkGxJfvaMZ+3POh4Q4Oum7Bud7R2tzy1eo1iN2+MvuvJdBRJcJeY/isGn6/9fTLpkxa45rBoBYgA0prxFKs9dqKAnM6Ix4i5W61jcQHhjBxkutNCiCFQQ9H8twHqUFXo18fWE86Xpt6iPV7YnsWda8u+ElumquXJg25J4XhQDEPihOeaqDzGYfUmNhNLksZ12N9PpY7C3Nc+vDRuihkq3BcnHkKGVbzH8YDGH8=
+  app: mindful-eater-api
+  on:
+    repo: vmsimone/mindful-eater-api
