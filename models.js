@@ -2,30 +2,43 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const foodSchema = mongoose.Schema({
-    "name": "banana",
-    "category": "fruit",
+    "name": String,
+    "category": String,
     "nutrients": {
-        "carbs": 26.95,
-        "calcium": 6,
-        "fat": 0.39,
-        "fiber": 3.1,
-        "iron": 0.31,
-        "protein": 1.29,
-        "sugars": 14.43,
-        "zinc": 0.18
+        "carbs": Number,
+        "calcium": Number,
+        "fat": Number,
+        "fiber": Number,
+        "iron": Number,
+        "protein": Number,
+        "sugars": Number,
+        "zinc": Number
     },
     "vitamins": {
-        "A": 4,
-        "B-6": 0.43,
-        "B-12": 0,
-        "C": 10.3,
-        "D": 0,
-        "E": 0.12,
-        "K": 0.6
+        "A": Number,
+        "B-6": Number,
+        "B-12": Number,
+        "C": Number,
+        "D": Number,
+        "E": Number,
+        "K": Number
     },
-    "allergens": [],
-    "okayFor": ["vegan", "vegetarian", "pescetarian", "paleo", "gluten-free", "pork-free"]
+    "allergens": [String],
+    "okayFor": [String],
+    "user": String
 });
+
+foodSchema.methods.serialize = function() {
+    return {
+        id: this._id,
+        name: this.name,
+        category: this.category,
+        nutrients: this.nutrients,
+        vitamins: this.vitamins,
+        allergens: this.allergens,
+        okayFor: this.okayFor
+    };
+};
 
 const Food = mongoose.model('Food', foodSchema);
 
