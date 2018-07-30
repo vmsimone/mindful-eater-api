@@ -17,7 +17,7 @@ app.get('/api/*', (req, res) => {
   res.json({ok: true});
 });
 
-app.get('/:username/my-meals', (req, res) => {
+app.get('/foods', (req, res) => {
   Food
     .find()
     .then(foods => {
