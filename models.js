@@ -2,30 +2,18 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const foodSchema = mongoose.Schema({
-    "name": String,
-    "category": String,
+    "name": {type: String, required: true},
+    "category": {type: String, required: true},
     "nutrients": {
-        "carbs": Number,
-        "calcium": Number,
-        "fat": Number,
-        "fiber": Number,
-        "iron": Number,
-        "protein": Number,
-        "sugars": Number,
-        "zinc": Number
+        "calories": {type: Number, required: true},
+        "carbs": {type: Number, required: true},
+        "fat": {type: Number, required: true},
+        "iron": {type: Number, required: true},
+        "protein": {type: Number, required: true},
+        "sugars": {type: Number, required: true}
     },
-    "vitamins": {
-        "A": Number,
-        "B-6": Number,
-        "B-12": Number,
-        "C": Number,
-        "D": Number,
-        "E": Number,
-        "K": Number
-    },
-    "allergens": [String],
-    "okayFor": [String],
-    "user": String
+    "okayFor": Array,
+    "user": {type: String, required: true}
 });
 
 foodSchema.methods.serialize = function() {
@@ -36,7 +24,8 @@ foodSchema.methods.serialize = function() {
         nutrients: this.nutrients,
         vitamins: this.vitamins,
         allergens: this.allergens,
-        okayFor: this.okayFor
+        okayFor: this.okayFor,
+        user: this.user
     };
 };
 
