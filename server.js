@@ -24,19 +24,18 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/foods', (req, res) => {
-  // console.log('GET request made');
-  // console.log(Food.find(foods[0]));
-  // Food
-  //   .find()
-  //   .then(foods => {
-  //     res.json({
-  //       foods
-  //     });
-  //   })
-  //   .catch(err => {
-  //     console.error(err);
-  //     res.status(500).json({ error: 'Error thrown during GET' });
-  //   });
+  console.log('GET request made');
+  Food
+    .find()
+    .then(foods => {
+      res.json({
+        foods
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Error thrown during GET' });
+    });
 });
 
 app.post('/:username/my-meals', (req, res) => {
