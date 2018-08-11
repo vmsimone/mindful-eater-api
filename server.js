@@ -28,8 +28,11 @@ app.get('/api/foods', (req, res) => {
   Food
     .find()
     .then(foods => {
-      res.json({
-        foods
+      console.log(foods);
+      res.status(200).json({
+        foodsEaten: foods.map(
+          (food) => food.serialize()
+        )
       });
     })
     .catch(err => {

@@ -29,6 +29,6 @@ foodSchema.methods.serialize = function() {
     };
 };
 
-const Food = mongoose.model('Food', foodSchema);
+const Food = mongoose.model('Food', foodSchema, 'foods');
 
 module.exports = { Food };
