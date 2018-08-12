@@ -21,8 +21,6 @@ foodSchema.methods.serialize = function() {
         name: this.name,
         category: this.category,
         nutrients: this.nutrients,
-        vitamins: this.vitamins,
-        allergens: this.allergens,
         user: this.user
     };
 };
