@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   res.json({'working': 'hard'});
 })
 
-app.get('/api/foods', (req, res) => {
+app.get('/api/my-meals', (req, res) => {
   console.log('GET request made');
   Food
     .find()
@@ -41,18 +41,73 @@ app.get('/api/foods', (req, res) => {
     });
 });
 
-app.post('/:username/my-meals', (req, res) => {
-  // Food
-  //   .find(req.params.username)
-  //   .then()
+app.post('/api/my-meals', (req, res) => {
+  const requiredKeys = ['name', 'category', 'nutrients', 'user'];
+  for (let i = 0; i < requiredKeys.length; i++) {
+    const key = requiredKeys[i];
+    if (!(key in req.body)) {
+      const message = `Missing \`${key}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  Food.create({
+    name: req.body.name,
+    category: req.body.category,
+    nutrients: req.body.nutrients,
+    pages: req.body.pages,
+    user: req.body.user
+  })
+  .then(meal => res.status(201).json(meal.serialize()))
+  .catch(err => {
+    console.log(err);
+    res.status(500).json({ error: 'POST not functioning correctly' });
+  });
 });
 
-app.put('/:username/my-meals/:id', (req, res) =>{
+app.put('/api/my-meals/:id', (req, res) =>{
+  if(!(req.body.id)) {
+    res.status(400).json({
+      error: 'Request body does not contain id'
+    });
+  }
 
+  if (!(req.params.id && req.params.id === req.body.id)) {
+    res.status(400).json({
+      error: 'Request path id and request body id values must match'
+    });
+  }
+
+  const updated = {};
+  const updateableKeys = [];
+
+  updateableKeys.forEach(key => {
+    if (key in req.body) {
+      console.log(key);
+      updated[key] = req.body[key];
+    }
+  });
+
+  Food
+    .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
+    .then(updatedMeal => res.status(204).json(updatedMeal.serialize()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'PUT not functioning correctly' });
+    });
 });
 
-app.delete('/:username/my-meals/:id', (req, res) => {
-
+app.delete('/api/my-meals/:id', (req, res) => {
+  Food
+    .findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).json({ message: `${req.params.id} removed` });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'DELETE misfiring '});
+    });
 });
 
 app.use('*', function (req, res) {

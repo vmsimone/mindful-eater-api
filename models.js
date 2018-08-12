@@ -12,7 +12,6 @@ const foodSchema = mongoose.Schema({
         "protein": {type: Number, required: true},
         "sugars": {type: Number, required: true}
     },
-    "okayFor": Array,
     "user": {type: String, required: true}
 });
 
@@ -24,7 +23,6 @@ foodSchema.methods.serialize = function() {
         nutrients: this.nutrients,
         vitamins: this.vitamins,
         allergens: this.allergens,
-        okayFor: this.okayFor,
         user: this.user
     };
 };

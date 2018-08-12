@@ -26,9 +26,9 @@ describe('API', function() {
       });
   });
 
-  it('should return the collection on request to /api/foods', function() {
+  it('should return the collection on request to /api/my-meals', function() {
     return chai.request(app)
-      .get('/api/foods')
+      .get('/api/my-meals')
       .then(function(res) {
         res.should.have.status(200);
         res.should.be.json;
