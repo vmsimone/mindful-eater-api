@@ -19,16 +19,13 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  console.log('this part is working');
   res.json({'working': 'hard'});
 })
 
 app.get('/api/my-meals', (req, res) => {
-  console.log('GET request made');
   Food
     .find()
     .then(foods => {
-      console.log(foods);
       res.status(200).json({
         foodsEaten: foods.map(
           (food) => food.serialize()
@@ -56,7 +53,6 @@ app.post('/api/my-meals', (req, res) => {
     name: req.body.name,
     category: req.body.category,
     nutrients: req.body.nutrients,
-    pages: req.body.pages,
     user: req.body.user
   })
   .then(meal => res.status(201).json(meal.serialize()))
@@ -80,7 +76,7 @@ app.put('/api/my-meals/:id', (req, res) =>{
   }
 
   const updated = {};
-  const updateableKeys = [];
+  const updateableKeys = ["nutrients"];
 
   updateableKeys.forEach(key => {
     if (key in req.body) {
