@@ -170,6 +170,31 @@ describe('Food API', function() {
           });
         });
     });
+  });
 
+  describe('POST endpoint', function() {
+    it('should add a new meal to the database', function() {
+      const newMeal = generateTestData();
+
+      return chai.request(app)
+        .post('/api/my-meals')
+        .send(newMeal)
+        .then(function(res) {
+          expect(res).to.have.status(201);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.include.keys(
+            'name', 'category', 'nutrients', 'user'
+          );
+          expect(res.body.id).to.not.be.null;
+          expect(res.body.name).to.equal(newMeal.name);
+          expect(res.body.category).to.equal(newMeal.category);
+          expect(res.body.user).to.equal(newMeal.user);
+          
+          expect(res.body.nutrients).to.include.keys(
+            'calories', 'carbs', 'fat', 'iron', 'protein', 'sugars'
+          );
+      });
+    });
   });
 });
