@@ -197,4 +197,35 @@ describe('Food API', function() {
       });
     });
   });
+
+  describe('PUT endpoint', function() {
+    it('should update a meal\'s nutrients', function() {
+      const updaterObject = {
+        "nutrients": generateNutrients()
+      };
+
+      return Food
+        .findOne()
+        .then(function(sampleMeal) {
+          updaterObject.id = sampleMeal.id;
+
+          return chai.request(app)
+            .put(`/api/my-meals/${sampleMeal.id}`)
+            .send(updaterObject);
+        })
+        .then(function(res) {
+          expect(res).to.have.status(204);
+
+          return Food.findById(updaterObject.id);
+        })
+        .then(function(updatedMeal) {
+          expect(updatedMeal.nutrients.calories).to.equal(updatedMeal.nutrients.calories);
+          expect(updatedMeal.nutrients.carbs).to.equal(updatedMeal.nutrients.carbs);
+          expect(updatedMeal.nutrients.fat).to.equal(updatedMeal.nutrients.fat);
+          expect(updatedMeal.nutrients.iron).to.equal(updatedMeal.nutrients.iron);
+          expect(updatedMeal.nutrients.protein).to.equal(updatedMeal.nutrients.protein);
+          expect(updatedMeal.nutrients.sugars).to.equal(updatedMeal.nutrients.sugars);
+      });
+    });
+  });
 });
