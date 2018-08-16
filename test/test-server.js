@@ -228,4 +228,23 @@ describe('Food API', function() {
       });
     });
   });
+
+  describe('DELETE endpoint', function() {
+    it('should delete a meal by its id', function() {
+      let doomedMealID;
+      return Food
+        .findOne()
+        .then(function(doomedMeal) {
+          doomedMealID = doomedMeal.id;
+          return chai.request(app).delete(`/api/my-meals/${doomedMealID}`);
+        })
+        .then(function(res) {
+          expect(res).to.have.status(204);
+          return Food.findById(doomedMealID);
+        })
+        .then(function(deletedMeal) {
+          expect(deletedMeal).to.be.null;
+        });
+    });
+  });
 });
