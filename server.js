@@ -14,7 +14,6 @@ mongoose.Promise = global.Promise;
 
 const { CLIENT_ORIGIN, DATABASE_URL, PORT } = require('./config');
 const { Food } = require('./models');
-const { User } = require('./users/models');
 
 const app = express();
 
@@ -36,11 +35,11 @@ app.use('/api/auth/', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-// app.get('/api/users', jwtAuth, (req, res) => {
-//   return res.json({
-//     data: 'rosebud'
-//   });
-// });
+app.get('/api/auth/login ', jwtAuth, (req, res) => {
+  return res.json({
+    data: 'himitsu'
+  });
+});
 
 //main app endpoints
 app.get('/api/my-meals', (req, res) => {
