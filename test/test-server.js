@@ -106,16 +106,6 @@ describe('Food API', function() {
   after(function() {
     return closeServer();
   });
-
-  describe('test server', function() {
-    it('should have a 200 status', function() {
-      return chai.request(app)
-        .get('/')
-        .then(function(res) {
-          expect(res).to.have.status(200);
-        });
-    });
-  });
   
   describe('GET endpoint', function() {
     it('should return a JSON object on request to /api/my-meals', function() {
@@ -133,11 +123,11 @@ describe('Food API', function() {
         .get('/api/my-meals')
         .then(function(_res){
           res = _res;
-          expect(res.body.foodsEaten).to.have.lengthOf.at.least(1);
+          expect(res.body.mealsEaten).to.have.lengthOf.at.least(1);
           return Food.count();
         })
         .then(function(count){
-          expect(res.body.foodsEaten).to.have.lengthOf(count);
+          expect(res.body.mealsEaten).to.have.lengthOf(count);
         });
     });
 
@@ -147,9 +137,9 @@ describe('Food API', function() {
         .then(function(res) {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
-          expect(res.body.foodsEaten).to.be.a('array');
+          expect(res.body.mealsEaten).to.be.a('array');
 
-          res.body.foodsEaten.forEach(function(meal) {
+          res.body.mealsEaten.forEach(function(meal) {
             expect(meal).to.be.a('object');
             expect(meal).to.include.keys(
               'name', 'category', 'nutrients', 'user'
@@ -162,7 +152,7 @@ describe('Food API', function() {
       return chai.request(app)
         .get('/api/my-meals')
         .then(function(res) {
-          res.body.foodsEaten.forEach(function(meal) {
+          res.body.mealsEaten.forEach(function(meal) {
             expect(meal.nutrients).to.be.a('object');
             expect(meal.nutrients).to.include.keys(
               'calories', 'carbs', 'fat', 'iron', 'protein', 'sugars'
