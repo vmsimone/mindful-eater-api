@@ -1,8 +1,14 @@
 'use strict';
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+const passport = require('passport');
+
+const { router: usersRouter } = require('./users');
+const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
 mongoose.Promise = global.Promise;
 
@@ -10,24 +16,38 @@ const { CLIENT_ORIGIN, DATABASE_URL, PORT } = require('./config');
 const { Food } = require('./models');
 
 const app = express();
+
+app.use(morgan('common'));
+app.use(express.json());
+app.use(express.static('public'));
+
 app.use(
   cors({
       origin: CLIENT_ORIGIN
   })
 );
-app.use(express.json());
-app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  res.json({'working': 'hard'});
-})
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
+app.use('/api/users/', usersRouter);
+app.use('/api/auth/', authRouter);
+
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
+app.get('/api/auth/login ', jwtAuth, (req, res) => {
+  return res.json({
+    data: 'himitsu'
+  });
+});
+
+//main app endpoints
 app.get('/api/my-meals', (req, res) => {
   Food
     .find()
     .then(foods => {
       res.status(200).json({
-        foodsEaten: foods.map(
+        mealsEaten: foods.map(
           (food) => food.serialize()
         )
       });
@@ -62,7 +82,8 @@ app.post('/api/my-meals', (req, res) => {
   });
 });
 
-app.put('/api/my-meals/:id', (req, res) =>{
+app.put('/api/my-meals/:id', (req, res) => {
+  console.log(req.body);
   if(!(req.body.id)) {
     res.status(400).json({
       error: 'Request body does not contain id'
