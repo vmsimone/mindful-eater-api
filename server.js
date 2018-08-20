@@ -41,6 +41,23 @@ app.get('/api/auth/login ', jwtAuth, (req, res) => {
   });
 });
 
+//get by username
+app.get('/api/my-meals/:user', (req, res) => {
+  Food
+    .find({"user": req.params.user})
+    .then(foods => {
+      res.status(200).json({
+        mealsEaten: foods.map(
+          (food) => food.serialize()
+        )
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: 'Error thrown during GET' });
+    });
+})
+
 //main app endpoints
 app.get('/api/my-meals', (req, res) => {
   Food
@@ -83,7 +100,6 @@ app.post('/api/my-meals', (req, res) => {
 });
 
 app.put('/api/my-meals/:id', (req, res) => {
-  console.log(req.body);
   if(!(req.body.id)) {
     res.status(400).json({
       error: 'Request body does not contain id'
@@ -101,14 +117,16 @@ app.put('/api/my-meals/:id', (req, res) => {
 
   updateableKeys.forEach(key => {
     if (key in req.body) {
-      console.log(key);
       updated[key] = req.body[key];
     }
   });
 
   Food
     .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
-    .then(updatedMeal => res.status(204).json(updatedMeal.serialize()))
+    .then(updatedMeal => {
+      res.status(204).json(updatedMeal.serialize())
+      console.log(updatedMeal.serialize());
+    })
     .catch(err => {
       console.error(err);
       res.status(500).json({ message: 'PUT not functioning correctly' });
